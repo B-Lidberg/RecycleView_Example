@@ -25,7 +25,6 @@ class ItemRecyclerAdapter(private val list: List<Int>
         holder.textView.text = currentItem.toString()
 
         holder.itemView.setOnClickListener {
-            FakeData.sortedList[position] = 
             holder.textView.text = (currentItem + 1).toString()
         }
     }
