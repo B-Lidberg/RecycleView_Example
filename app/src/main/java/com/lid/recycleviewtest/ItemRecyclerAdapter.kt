@@ -1,13 +1,15 @@
 package com.lid.recycleviewtest
 
-import android.util.Log
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ItemRecyclerAdapter(private val list: List<Int>
+class ItemRecyclerAdapter(
+    private val viewModel: MainViewModel,
+    private val itemList: List<Int>
 ) : RecyclerView.Adapter<ItemRecyclerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(
@@ -20,20 +22,21 @@ class ItemRecyclerAdapter(private val list: List<Int>
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ItemRecyclerAdapter.ViewHolder, position: Int) {
-        val currentItem = list[position]
-        holder.textView.text = currentItem.toString()
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val currentItem = itemList[position]
+        holder.bind(currentItem)
 
-        holder.itemView.setOnClickListener {
-            holder.textView.text = (currentItem + 1).toString()
-        }
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return itemList.size
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textView: TextView = itemView.findViewById(R.id.textView)
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val itemTextView: TextView = itemView.findViewById(R.id.itemNumber)
+        fun bind(item: Int) {
+            itemTextView.text = item.toString()
+            itemView.setOnClickListener { viewModel.removeItem(item) }
+        }
     }
 }
