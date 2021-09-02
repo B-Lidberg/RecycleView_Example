@@ -1,14 +1,25 @@
 package com.lid.recycleviewtest
 
-object FakeData {
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 
-    val itemList = listOf(103, 40, 77, 908, 10, 119, 46)
+class FakeData {
 
-    val sortedList = itemList.sorted().toMutableList()
+    private val itemList = listOf(103, 40, 77, 908, 10, 119, 46)
+
+    private val sortedListLiveData = MutableLiveData(itemList.sorted())
+
+    fun getItemList(): LiveData<List<Int>> = sortedListLiveData
 
 
     fun removeItem(item: Int) {
-        sortedList.remove(item)
+        val currentList =  sortedListLiveData.value
+
+        if (currentList != null) {
+            val updatedList = currentList.toMutableList()
+            updatedList.remove(item)
+            sortedListLiveData.postValue(updatedList)
+        }
     }
 
 
